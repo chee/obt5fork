@@ -3,10 +3,6 @@
   "version": "5.8.2",
   "description": "Origami component development tools.",
   "main": "./lib/origami-build-tools",
-  "bin": {
-    "origami-build-tools": "./lib/origami-build-tools-cli.js",
-    "obt": "./lib/origami-build-tools-cli.js"
-  },
   "engines": {
     "node": ">= 8.0.0",
     "npm": ">= 2.0.0"
