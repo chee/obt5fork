@@ -1,4 +1,4 @@
-# origami-build-tools [![Build Status](https://travis-ci.org/Financial-Times/origami-build-tools.svg?branch=master)](https://travis-ci.org/Financial-Times/origami-build-tools)
+# origami-build-tools ![npm test](https://github.com/chee/obt5fork/workflows/npm%20test/badge.svg)
 
 Standardised build tools for Origami modules and products developed based on these modules.
 
