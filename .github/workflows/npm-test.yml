@@ -24,8 +24,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: sudo gem install rake
-    - run: sudo gem install scss_lint
+    - run: sudo gem install --no-ri --no-rdoc --format-executable rake
+    - run: rake=rake sudo --preserve-env gem install --no-ri --no-rdoc scss_lint
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
