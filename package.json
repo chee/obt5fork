@@ -12,7 +12,7 @@
     "npm": ">= 2.0.0"
   },
   "scripts": {
-    "test": "gem install scss-lint; mocha -t 50000 `find . -name '*.test.js' -path './test/*'`"
+    "test": "mocha -t 50000 `find . -name '*.test.js' -path './test/*'`"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
