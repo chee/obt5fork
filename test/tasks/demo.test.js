@@ -26,18 +26,6 @@ describe('Demo task', function() {
 		fs.removeSync(demoTestPath);
 	});
 
-	describe('Run server', function() {
-		it('should run a server', function(done) {
-			demo.runServer(gulp)
-				.then(function (server) {
-					server.emit('kill');
-					server.on('end', function() {
-						done();
-					});
-				});
-		});
-	});
-
 	describe('Build demos', function() {
 		it('should fail if there is not a config file', function(done) {
 			process.chdir(obtPath);
