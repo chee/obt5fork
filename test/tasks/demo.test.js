@@ -118,9 +118,7 @@ describe('Demo task', function() {
 		it('should build demo html', function(done) {
 			fs.writeFileSync('demos/src/test1.mustache', '<div>test1</div>', 'utf8');
 			fs.writeFileSync('demos/src/test2.mustache', '<div>test2</div>', 'utf8');
-			const demoStream = demo(gulp, {
-				dist: true
-			})
+			const demoStream = demo(gulp)
 			.on('end', function() {
 					const test1 = fs.readFileSync('demos/test1.html', 'utf8');
 					const test2 = fs.readFileSync('demos/test2.html', 'utf8');
@@ -139,10 +137,10 @@ describe('Demo task', function() {
 		it('should build local demos', function(done) {
 			const demoStream = demo(gulp)
 			.on('end', function() {
-				expect(fs.readFileSync('demos/local/test1.html', 'utf8')).to.contain('<div>test1</div>');
-				expect(fs.readFileSync('demos/local/test2.html', 'utf8')).to.contain('<div>test2</div>');
-				expect(fs.readFileSync('demos/local/demo.js', 'utf8')).to.contain('function Test() {\n\tvar name = \'test\';');
-				expect(fs.readFileSync('demos/local/demo.css', 'utf8')).to.contain('div {\n  color: blue; }\n');
+				expect(fs.readFileSync('demos/test1.html', 'utf8')).to.contain('<div>test1</div>');
+				expect(fs.readFileSync('demos/test2.html', 'utf8')).to.contain('<div>test2</div>');
+				expect(fs.readFileSync('demos/demo.js', 'utf8')).to.contain('function Test() {\n\tvar name = \'test\';');
+				expect(fs.readFileSync('demos/demo.css', 'utf8')).to.contain('div {\n  color: blue; }\n');
 				fs.unlink('demos/test1.html');
 				fs.unlink('demos/test2.html');
 				fs.removeSync('demos/local');
@@ -155,9 +153,7 @@ describe('Demo task', function() {
 		it('should load local partials', function(done) {
 			fs.writeFileSync('demos/src/test1.mustache', '<div>test1</div>{{>partial1}}', 'utf8');
 			fs.writeFileSync('demos/src/test2.mustache', '<div>test1</div>{{>partials/partial2}}', 'utf8');
-			const demoStream = demo(gulp, {
-				dist: true
-			})
+			const demoStream = demo(gulp)
 			.on('end', function() {
 				const test1 = fs.readFileSync('demos/test1.html', 'utf8');
 				const test2 = fs.readFileSync('demos/test2.html', 'utf8');
