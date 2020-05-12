@@ -1,4 +1,4 @@
-# origami-build-tools ![npm test](https://github.com/chee/obt5fork/workflows/npm%20test/badge.svg)
+# obt5 ![npm test](https://github.com/Financial-Times/obt5fork/workflows/npm%20test/badge.svg)
 
 Standardised build tools for Origami modules and products developed based on these modules.
 
@@ -12,7 +12,7 @@ If you have any issues with OBT, please check out [troubleshooting guide](https:
 
 2. Install the build tools globally:
 
-		npm install -g origami-build-tools
+		npm install -g obt5
 
 ## Usage
 

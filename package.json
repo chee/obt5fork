@@ -1,5 +1,5 @@
 {
-  "name": "origami-build-tools",
+  "name": "obt5",
   "version": "5.8.2",
   "description": "Origami component development tools.",
   "main": "./lib/origami-build-tools",
