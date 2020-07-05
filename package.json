@@ -24,7 +24,7 @@
     "colors": "^1.4.0",
     "configstore": "^2.1.0",
     "denodeify": "^1.2.1",
-    "falafel": "^1.2.0",
+    "falafel": "^2.2.4",
     "findit": "^2.0.0",
     "graphite": "0.0.7",
     "gulp-autoprefixer": "^3.1.0",
