@@ -176,23 +176,6 @@ describe('Build task', function() {
 					done();
 				});
 		});
-
-		it('should support a standalone option which creates a global variable', function(done) {
-			build
-				.js(gulp, {
-					standalone: 'origami'
-				})
-				.on('end', function() {
-					const builtJs = fs.readFileSync('build/main.js', 'utf8');
-					expect(builtJs).to.contain('sourceMappingURL');
-					expect(builtJs).to.contain('var Test');
-					expect(builtJs).to.contain('function Test() {\n\tvar name = \'test\';');
-					expect(builtJs).to.contain('var textTest = "This is a test\\n";');
-					expect(builtJs).to.contain('\n\nmodule.exports = {"test":true}\n\n');
-					expect(builtJs).to.contain('var origami =\n');
-					done();
-				});
-		});
 	});
 
 	describe('Build Sass', function() {
