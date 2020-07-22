@@ -13,7 +13,7 @@ const oTestPath = 'test/fixtures/o-test';
 const pathSuffix = '-demo';
 const demoTestPath = path.resolve(projectPath, oTestPath + pathSuffix);
 
-describe('Demo task', function() {
+describe.only('Demo task', function() {
 	let requiredOptions;
 
 	beforeEach(function() {
@@ -44,86 +44,45 @@ describe('Demo task', function() {
 		});
 
 		it('should fail if there is not a config file', function(done) {
-			fs.removeSync('./origami.json');
-			fs.removeSync('./demos/src/config.json');
+			fs.removeSync('origami.json');
+			fs.removeSync('demos/src/config.json');
 			demo(gulp, Object.assign({}, requiredOptions))
 				.on('error', function(err) {
-					proclaim.include(err.message, 'Couldn\'t find demos config path');
+					proclaim.include(err.message, 'Couldn\'t find demo config');
 					done();
+				})
+				.on('end', function () {
+					throw new Error('Did not error.');
 				});
 		});
 
-		it('should not error with a custom config file', function(done) {
-			fs.writeFileSync('bower.json', '{"name":"o-test"}', 'utf8');
-			fs.copySync('demos/src/config.json', 'demos/src/mysupercoolconfig.json');
-			const demoStream = demo(gulp, Object.assign({}, requiredOptions, {
-				demoConfig: 'demos/src/mysupercoolconfig.json'
-			}))
-			.on('error', function errorHandler(err) {
-				// It will throw a template not found error which is fixed in "should build html" test
-				proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: demos/src/mysupercoolconfigs.json');
-				demoStream.removeListener('error', errorHandler);
-				done();
-			});
-		});
-
 		it('should not fail using origami.json', function(done) {
-			const demoStream = demo(gulp, Object.assign({}, requiredOptions, {
-				demoConfig: 'origami.json'
-			}))
-			.on('error', function errorHandler(err) {
-				// It will throw a template not found error which is fixed in "should build html" test
-				proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: origami.json');
-				demoStream.removeListener('error', errorHandler);
-				done();
-			});
-		});
-
-		it('should not fail if there is a config.json file', function(done) {
+			fs.removeSync('demos/src/config.json');
 			const demoStream = demo(gulp, Object.assign({}, requiredOptions))
-				.on('error', function errorHandler(err) {
-						// It will throw a template not found error which is fixed in "should build html" test
-						proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: demos/src/config.json,demos/src/config.js,origami.json');
-						demoStream.removeListener('error', errorHandler);
-						done();
-					});
-		});
+				.on('error', function(err) {
+					throw new Error('An unexpected error was thrown: ' + err.message);
+				})
+				.on('end', function () {
+					done();
+				});
 
-		it('should not fail if there is a config.js file', function(done) {
-			const config = fs.readFileSync('demos/src/config.json');
-			fs.writeFileSync('demos/src/config.js', 'module.exports = ' + config, 'utf8');
-			const demoStream = demo(gulp, Object.assign({}, requiredOptions))
-				.on('error', function errorHandler(err) {
-						// It will throw a template not found error which is fixed in "should build html" test
-						proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: demos/src/config.json,demos/src/config.js,origami.json');
-						demoStream.removeListener('error', errorHandler);
-						done();
-					});
-		});
-
-		it('should not fail if it\'s using the old config format', function(done) {
-			const demoStream = demo(gulp, Object.assign({}, requiredOptions, {
-				demoConfig: 'demos/src/oldconfig.json'
-			}))
-			.on('error', function errorHandler(err) {
-				proclaim.include(err.message, 'Demo template not found');
-				demoStream.removeListener('error', errorHandler);
-				done();
-			});
+			demoStream.resume();
 		});
 
 		it('should fail if there are demos with the same name', function(done) {
-			const demoConfig = JSON.parse(fs.readFileSync('demos/src/config.json', 'utf8'));
+			const demoConfig = JSON.parse(fs.readFileSync('origami.json', 'utf8'));
 			demoConfig.demos[1].name = 'test1';
-			fs.writeFileSync('demos/src/config2.json', JSON.stringify(demoConfig));
-			const demoStream = demo(gulp, Object.assign({}, requiredOptions, {
-				demoConfig: 'demos/src/config2.json'
-			}))
+			fs.writeFileSync('origami.json', JSON.stringify(demoConfig));
+			const demoStream = demo(gulp, Object.assign({}, requiredOptions))
 			.on('error', function errorHandler(err) {
 				proclaim.equal(err.message, 'Demos with the same name were found. Give them unique names and try again.');
 				demoStream.removeListener('error', errorHandler);
 				done();
+			})
+			.on('end', function () {
+				throw new Error('Did not error.');
 			});
+			demoStream.resume();
 		});
 
 		it('should build demo html', function(done) {
