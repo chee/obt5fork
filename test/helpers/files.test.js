@@ -35,24 +35,6 @@ describe('Files helper', function() {
 		fs.unlink(path.resolve(filesTestPath, 'bower.json'));
 	});
 
-	it('should return a list of Sass files', function() {
-		return files.getSassFilesList().then(function(sassFiles) {
-			const testResults = [path.join(process.cwd() + '/main.scss'), path.join(process.cwd() + '/src/scss/_variables.scss')];
-			expect(sassFiles).to.contain(testResults[0]);
-			expect(sassFiles).to.contain(testResults[1]);
-		});
-	});
-
-	it('should check if the module supports silent mode', function() {
-		fs.writeFileSync('bower.json', JSON.stringify({ name: 'o-test' }), 'utf8');
-		return files.getSassFilesList()
-			.then(files.sassSupportsSilent)
-			.then(function(supportsSilent) {
-				expect(supportsSilent).to.be(true);
-				fs.unlink(path.resolve(filesTestPath, 'bower.json'));
-			});
-	});
-
 	describe('Main files', function() {
 		before(function() {
 			fs.writeFileSync('bower.json', JSON.stringify({ name: 'o-test' }), 'utf8');
@@ -64,7 +46,7 @@ describe('Files helper', function() {
 
 		it('should get the path of main.scss', function() {
 			expect(files.getMainSassPath()).to.be(null);
-			const bowerJson = files.getBowerJson();
+			const bowerJson = require(path.join(process.cwd(), '/bower.json'));
 			bowerJson.main = bowerJson.main || [];
 			bowerJson.main.push('main.scss');
 			fs.writeFileSync('bower.json', JSON.stringify(bowerJson), 'utf8');
@@ -73,62 +55,11 @@ describe('Files helper', function() {
 
 		it('should get the path of main.js', function() {
 			expect(files.getMainJsPath()).to.be(null);
-			const bowerJson = files.getBowerJson();
+			const bowerJson = require(path.join(process.cwd(), '/bower.json'));
 			bowerJson.main = bowerJson.main || [];
 			bowerJson.main.push('main.js');
 			fs.writeFileSync('bower.json', JSON.stringify(bowerJson), 'utf8');
 			expect(files.getMainJsPath()).to.be(process.cwd() + '/main.js');
-		});
-	});
-
-	describe('Bower.json', function() {
-		beforeEach(function() {
-			if (fs.existsSync(path.resolve(filesTestPath, 'bower.json'))) {
-				fs.unlink(path.resolve(filesTestPath, 'bower.json'));
-			}
-		});
-
-		afterEach(function() {
-			fs.unlink(path.resolve(filesTestPath, 'bower.json'));
-		});
-
-		it('should get bower.json', function() {
-			expect(typeof files.getBowerJson()).to.be('undefined');
-			fs.writeFileSync('bower.json', JSON.stringify({}), 'utf8');
-			expect(typeof files.getBowerJson()).to.not.be('undefined');
-		});
-
-		it('should check if bower.json is present', function() {
-			expect(files.bowerJsonExists()).to.be(false);
-			fs.writeFileSync('bower.json', JSON.stringify({}), 'utf8');
-			expect(files.bowerJsonExists()).to.be(true);
-		});
-	});
-
-	describe('Package.json', function() {
-		beforeEach(function() {
-			if (fs.existsSync(path.resolve(filesTestPath, 'package.json'))) {
-				try {
-					fs.unlinkSync(path.resolve(filesTestPath, 'package.json'));
-				} catch (o_O) {
-				}
-			}
-		});
-
-		afterEach(function() {
-			fs.unlink(path.resolve(filesTestPath, 'package.json'));
-		});
-
-		it('should get package.json', function() {
-			expect(typeof files.getPackageJson()).to.be('undefined');
-			fs.writeFileSync('package.json', JSON.stringify({}), 'utf8');
-			expect(typeof files.getPackageJson()).to.not.be('undefined');
-		});
-
-		it('should check if package.json is present', function() {
-			expect(files.packageJsonExists()).to.be(false);
-			fs.writeFileSync('package.json', JSON.stringify({}), 'utf8');
-			expect(files.packageJsonExists()).to.be(true);
 		});
 	});
 
