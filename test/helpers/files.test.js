@@ -24,10 +24,6 @@ describe('Files helper', function() {
 		fs.removeSync(filesTestPath);
 	});
 
-	it('should return correct build folder', function() {
-		expect(files.getBuildFolderPath()).to.be(process.cwd() + '/build/');
-	});
-
 	it('should return module name', function() {
 		expect(files.getModuleName()).to.be('');
 		fs.writeFileSync('bower.json', JSON.stringify({ name: 'o-test' }), 'utf8');
