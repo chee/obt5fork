@@ -1,11 +1,10 @@
-/* eslint-env mocha */
 'use strict';
-
-const expect = require('expect.js');
-const gulp = require('gulp');
 
 const fs = require('fs-extra');
 const path = require('path');
+
+const proclaim = require('proclaim');
+const gulp = require('gulp');
 
 const demo = require('../../lib/tasks/demo');
 
@@ -32,7 +31,7 @@ describe('Demo task', function() {
 			fs.writeFileSync('bower.json', '{"name":"o-test"}', 'utf8');
 			demo(gulp)
 				.on('error', function(err) {
-					expect(err.message).to.be('Couldn\'t find demos config path, checked: origami.json,demos/src/config.json');
+					proclaim.equal(err.message, 'Couldn\'t find demos config path, checked: origami.json,demos/src/config.json');
 					fs.unlink(path.resolve(obtPath, 'bower.json'));
 					process.chdir(demoTestPath);
 					done();
@@ -47,7 +46,7 @@ describe('Demo task', function() {
 			})
 			.on('error', function errorHandler(err) {
 				// It will throw a template not found error which is fixed in "should build html" test
-				expect(err.message).to.not.be('Couldn\'t find demos config path, checked: demos/src/mysupercoolconfigs.json');
+				proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: demos/src/mysupercoolconfigs.json');
 				fs.unlink('demos/src/mysupercoolconfig.json');
 				demoStream.removeListener('error', errorHandler);
 				done();
@@ -60,7 +59,7 @@ describe('Demo task', function() {
 			})
 			.on('error', function errorHandler(err) {
 				// It will throw a template not found error which is fixed in "should build html" test
-				expect(err.message).to.not.be('Couldn\'t find demos config path, checked: origami.json');
+				proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: origami.json');
 				demoStream.removeListener('error', errorHandler);
 				done();
 			});
@@ -70,7 +69,7 @@ describe('Demo task', function() {
 			const demoStream = demo(gulp)
 				.on('error', function errorHandler(err) {
 						// It will throw a template not found error which is fixed in "should build html" test
-						expect(err.message).to.not.be('Couldn\'t find demos config path, checked: demos/src/config.json,demos/src/config.js,origami.json');
+						proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: demos/src/config.json,demos/src/config.js,origami.json');
 						demoStream.removeListener('error', errorHandler);
 						done();
 					});
@@ -82,7 +81,7 @@ describe('Demo task', function() {
 			const demoStream = demo(gulp)
 				.on('error', function errorHandler(err) {
 						// It will throw a template not found error which is fixed in "should build html" test
-						expect(err.message).to.not.be('Couldn\'t find demos config path, checked: demos/src/config.json,demos/src/config.js,origami.json');
+						proclaim.notEqual(err.message, 'Couldn\'t find demos config path, checked: demos/src/config.json,demos/src/config.js,origami.json');
 						fs.unlink('demos/src/config.js');
 						demoStream.removeListener('error', errorHandler);
 						done();
@@ -94,7 +93,7 @@ describe('Demo task', function() {
 				demoConfig: 'demos/src/oldconfig.json'
 			})
 			.on('error', function errorHandler(err) {
-				expect(err.message).to.be('Demo template not found: ' + path.resolve(process.cwd(), 'demos/src/test1.mustache'));
+				proclaim.equal(err.message, 'Demo template not found: ' + path.resolve(process.cwd(), 'demos/src/test1.mustache'));
 				demoStream.removeListener('error', errorHandler);
 				done();
 			});
@@ -108,7 +107,7 @@ describe('Demo task', function() {
 				demoConfig: 'demos/src/config2.json'
 			})
 			.on('error', function errorHandler(err) {
-				expect(err.message).to.be('Demos with the same name were found. Give them unique names and try again.');
+				proclaim.equal(err.message, 'Demos with the same name were found. Give them unique names and try again.');
 				fs.unlink('demos/src/config2.json');
 				demoStream.removeListener('error', errorHandler);
 				done();
@@ -122,10 +121,10 @@ describe('Demo task', function() {
 			.on('end', function() {
 					const test1 = fs.readFileSync('demos/test1.html', 'utf8');
 					const test2 = fs.readFileSync('demos/test2.html', 'utf8');
-					expect(test1).to.contain('<div>test1</div>');
-					expect(test2).to.contain('<div>test2</div>');
-					expect(test1).to.match(/\/v2\/polyfill\.min\.js\?features=.*promises/);
-					expect(test2).to.match(/\/v2\/polyfill\.min\.js\?features=.*promises/);
+					proclaim.include(test1, '<div>test1</div>');
+					proclaim.include(test2, '<div>test2</div>');
+					proclaim.match(test1, /\/v2\/polyfill\.min\.js\?features=.*promises/);
+					proclaim.match(test2, /\/v2\/polyfill\.min\.js\?features=.*promises/);
 					fs.unlink('demos/test1.html');
 					fs.unlink('demos/test2.html');
 					done();
@@ -141,8 +140,8 @@ describe('Demo task', function() {
 			.on('end', function() {
 				const test1 = fs.readFileSync('demos/test1.html', 'utf8');
 				const test2 = fs.readFileSync('demos/test2.html', 'utf8');
-				expect(test1).to.contain('<div>partial1</div>');
-				expect(test2).to.contain('<div>partial2</div>');
+				proclaim.include(test1, '<div>partial1</div>');
+				proclaim.include(test2, '<div>partial2</div>');
 				fs.unlink('demos/test1.html');
 				fs.unlink('demos/test2.html');
 				done();

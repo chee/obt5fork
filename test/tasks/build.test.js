@@ -4,7 +4,7 @@
 const denodeify = require('denodeify');
 const exec = denodeify(require('child_process').exec, function(err, stdout) { return [err, stdout]; });
 
-const expect = require('expect.js');
+const proclaim = require('proclaim');
 const gulp = require('gulp');
 
 const fs = require('fs-extra');
@@ -48,11 +48,11 @@ describe('Build task', function() {
 			build.js(gulp)
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
-					expect(builtJs).to.contain('sourceMappingURL');
-					expect(builtJs).to.contain('var Test');
-					expect(builtJs).to.contain('function Test() {\n\tvar name = \'test\';');
-					expect(builtJs).to.contain('var textTest = "This is a test\\n";');
-					expect(builtJs).to.contain('\n\nmodule.exports = {"test":true}\n\n');
+					proclaim.include(builtJs, 'sourceMappingURL');
+					proclaim.include(builtJs, 'var Test');
+					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
+					proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
+					proclaim.include(builtJs, '\n\nmodule.exports = {"test":true}\n\n');
 					done();
 				});
 		});
@@ -64,11 +64,11 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
-					expect(builtJs).to.not.contain('sourceMappingURL');
-					expect(builtJs).to.not.contain('var Test');
-					expect(builtJs).to.not.contain('function Test() {\n\tvar name = \'test\';');
-					expect(builtJs).to.not.contain('"This is a test"');
-					expect(builtJs).to.not.contain('function Test() {\n\tvar name = \'test\';');
+					proclaim.doesNotInclude(builtJs, 'sourceMappingURL');
+					proclaim.doesNotInclude(builtJs, 'var Test');
+					proclaim.doesNotInclude(builtJs, 'function Test() {\n\tvar name = \'test\';');
+					proclaim.doesNotInclude(builtJs, '"This is a test"');
+					proclaim.doesNotInclude(builtJs, 'function Test() {\n\tvar name = \'test\';');
 					done();
 			});
 		});
@@ -80,7 +80,7 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
-					expect(builtJs).to.contain(CORE_JS_IDENTIFIER);
+					proclaim.include(builtJs, CORE_JS_IDENTIFIER);
 					done();
 				});
 		});
@@ -93,7 +93,7 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
-					expect(builtJs).to.not.contain(CORE_JS_IDENTIFIER);
+					proclaim.doesNotInclude(builtJs, CORE_JS_IDENTIFIER);
 					done();
 				});
 		});
@@ -105,9 +105,9 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
-					expect(builtJs).to.contain('sourceMappingURL');
-					expect(builtJs).to.not.contain('var Test');
-					expect(builtJs).to.contain('function Test() {\n\tvar name = \'test\';');
+					proclaim.include(builtJs, 'sourceMappingURL');
+					proclaim.doesNotInclude(builtJs, 'var Test');
+					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
 					done();
 				});
 		});
@@ -119,11 +119,11 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtJs = fs.readFileSync('test-build/main.js', 'utf8');
-					expect(builtJs).to.contain('sourceMappingURL');
-					expect(builtJs).to.contain('var Test');
-					expect(builtJs).to.contain('function Test() {\n\tvar name = \'test\';');
-					expect(builtJs).to.contain('var textTest = "This is a test\\n";');
-					expect(builtJs).to.contain('function Test() {\n\tvar name = \'test\';');
+					proclaim.include(builtJs, 'sourceMappingURL');
+					proclaim.include(builtJs, 'var Test');
+					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
+					proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
+					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
 					done();
 				});
 		});
@@ -135,11 +135,11 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/bundle.js', 'utf8');
-					expect(builtJs).to.contain('sourceMappingURL');
-					expect(builtJs).to.contain('var Test');
-					expect(builtJs).to.contain('function Test() {\n\tvar name = \'test\';');
-					expect(builtJs).to.contain('var textTest = "This is a test\\n";');
-					expect(builtJs).to.contain('function Test() {\n\tvar name = \'test\';');
+					proclaim.include(builtJs, 'sourceMappingURL');
+					proclaim.include(builtJs, 'var Test');
+					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
+					proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
+					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
 					done();
 				});
 		});
@@ -150,13 +150,13 @@ describe('Build task', function() {
 					js: './src/js/syntax-error.js'
 				})
 				.on('error', function(e) {
-					expect(e.message).to.contain('SyntaxError');
-					expect(e.message).to.contain('Unexpected token');
+					proclaim.include(e.message, 'SyntaxError');
+					proclaim.include(e.message, 'Unexpected token');
 					done();
 				})
 				.on('end', function() {
 					// Fail quickly to not wait for test to timeout
-					expect(true).to.be(false);
+					proclaim.isFalse(true);
 					done();
 				});
 		});
@@ -167,12 +167,14 @@ describe('Build task', function() {
 					js: './src/js/missing-dep.js'
 				})
 				.on('error', function(e) {
-					expect(e.message).to.contain('Module not found: Error: Can\'t resolve \'dep\'');
-					done();
+					try {
+						proclaim.include(e.message, 'Module not found: Error: Can\'t resolve \'dep\'');
+						done();
+					} catch (error) {}
 				})
 				.on('end', function() {
 					// Fail quickly to not wait for test to timeout
-					expect(true).to.be(false);
+					proclaim.isFalse(true);
 					done();
 				});
 		});
@@ -206,7 +208,7 @@ describe('Build task', function() {
 			build.sass(gulp)
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/main.css', 'utf8');
-					expect(builtCss).to.contain('div {\n  color: blue; }\n');
+					proclaim.include(builtCss, 'div {\n  color: blue; }\n');
 					done();
 				});
 		});
@@ -218,7 +220,7 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/main.css', 'utf8');
-					expect(builtCss).to.be('div{color:#00f}');
+					proclaim.equal(builtCss, 'div{color:#00f}');
 					done();
 			});
 		});
@@ -230,7 +232,7 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/main.css', 'utf8');
-					expect(builtCss).to.contain('p {\n  color: #000000; }\n');
+					proclaim.include(builtCss, 'p {\n  color: #000000; }\n');
 					done();
 				});
 		});
@@ -242,7 +244,7 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtCss = fs.readFileSync('test-build/main.css', 'utf8');
-					expect(builtCss).to.contain('div {\n  color: blue; }\n');
+					proclaim.include(builtCss, 'div {\n  color: blue; }\n');
 					exec('rm -rf test-build')
 						.then(function() { done(); }, done);
 				});
@@ -255,7 +257,7 @@ describe('Build task', function() {
 				})
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/bundle.css', 'utf8');
-					expect(builtCss).to.contain('div {\n  color: blue; }\n');
+					proclaim.include(builtCss, 'div {\n  color: blue; }\n');
 					done();
 				});
 		});
