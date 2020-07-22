@@ -13,13 +13,11 @@ describe('obt', function() {
 	const fetchMock = sinon.stub();
 	const updateNotifierMock = sinon.stub();
 	const logMock = sinon.stub();
-	const metricsMock = sinon.stub();
 
 	beforeEach(function() {
 		fetchMock.resetHistory();
 		logMock.resetHistory();
 		updateNotifierMock.resetHistory();
-		metricsMock.resetHistory();
 
 		mockery.enable({
 			useCleanCache: true,
@@ -30,7 +28,6 @@ describe('obt', function() {
 		mockery.registerMock('isomorphic-fetch', fetchMock);
 		mockery.registerMock('./helpers/update-notifier', updateNotifierMock);
 		mockery.registerMock('./helpers/log', logMock);
-		mockery.registerMock('./helpers/metrics', metricsMock);
 
 		mockery.registerAllowable(moduleUnderTest);
 
@@ -42,35 +39,5 @@ describe('obt', function() {
 		mockery.deregisterAll();
 		mockery.disable();
 		process.version = version;
-	});
-
-	it('passes the node major version to the metrics module', function() {
-		delete process.version;
-		process.version = 'v6.0.1';
-		require(moduleUnderTest);
-		expect(metricsMock.calledOnce).to.equal(true);
-		expect(metricsMock.args[0].length).to.equal(1);
-		expect(metricsMock.args[0][0]).to.eql({
-			nodeVersion: {
-				invoked: {
-					6: 1
-				}
-			}
-		});
-	});
-
-	it('passes the node major version to the metrics module', function() {
-		delete process.version;
-		process.version = 'v4.0.1';
-		require(moduleUnderTest);
-		expect(metricsMock.calledOnce).to.equal(true);
-		expect(metricsMock.args[0].length).to.equal(1);
-		expect(metricsMock.args[0][0]).to.eql({
-			nodeVersion: {
-				invoked: {
-					4: 1
-				}
-			}
-		});
 	});
 });
