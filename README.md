@@ -1,22 +1,20 @@
-# obt5 ![npm test](https://github.com/Financial-Times/obt5fork/workflows/npm%20test/badge.svg)
+# obtv5fork
 
-Standardised build tools for Origami modules and products developed based on these modules.
+`obtv5fork` is used to bundle Origami components by v2 of the [Origami Build Service](https://github.com/Financial-Times/origami-build-service). It is a fork of [origami-build-tools v5](https://github.com/Financial-Times/origami-build-tools) with features for local component development removed.
 
-If you have any issues with OBT, please check out [troubleshooting guide](https://github.com/Financial-Times/origami-build-tools/blob/master/TROUBLESHOOT.md) before raising an issue.
+## Requirements
 
-## Installation
-
-1. Install these dependencies:
-	* [node.js](http://nodejs.org/)
-	* [Ruby](https://www.ruby-lang.org/en/) (Macs typically ship with Ruby by default)
-
-2. Install the build tools globally:
-
-		npm install -g obt5
+`obtv5fork` requires [Node.js] 8.x and [npm].
 
 ## Usage
 
-Run the install task for the first time will to install required dependencies:
+First install `obtv5fork`:
+
+```
+npm install obtv5fork --save
+```
+
+Then run the install task within an Origami component directory to install required dependencies:
 
 	origami-build-tools install
 
@@ -218,3 +216,6 @@ OBT gathers analytics data about its usage to help prioritise future development
 
 ## Licence
 This software is published by the Financial Times under the [MIT licence](http://opensource.org/licenses/MIT).
+
+[node.js]: https://nodejs.org/
+[npm]: https://www.npmjs.com/
