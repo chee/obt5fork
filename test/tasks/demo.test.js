@@ -13,7 +13,7 @@ const oTestPath = 'test/fixtures/o-test';
 const pathSuffix = '-demo';
 const demoTestPath = path.resolve(projectPath, oTestPath + pathSuffix);
 
-describe.only('Demo task', function() {
+describe('Demo task', function() {
 	let requiredOptions;
 
 	beforeEach(function() {
