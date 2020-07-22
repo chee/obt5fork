@@ -23,7 +23,6 @@ describe('obt', function() {
 			warnOnUnregistered: false
 		});
 
-		mockery.registerMock('./helpers/update-notifier', updateNotifierMock);
 		mockery.registerMock('./helpers/log', logMock);
 
 		mockery.registerAllowable(moduleUnderTest);
