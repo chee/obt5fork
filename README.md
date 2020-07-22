@@ -18,19 +18,6 @@ Then run the install task within an Origami component directory to install requi
 
 	origami-build-tools install
 
-### Developing products
-
-Build CSS and JavaScript bundles in the `build` directory:
-
-	origami-build-tools build
-
-### Developing modules locally
-
-Build and browse the demos (typically: <http://localhost:8080/demos/local/>),
-automatically re-build the module's demos and assets every time a file changes:
-
-	origami-build-tools demo --runServer --watch
-
 ## Tasks
 
 All the tasks are built using [gulp](http://gulpjs.com/), and almost all of them return a stream. They are structured in 5 higher level tasks, and each one has one or more subtasks.
@@ -44,7 +31,6 @@ All the tasks are built using [gulp](http://gulpjs.com/), and almost all of them
 	   test     Test if Sass silent compilation follows the Origami specification
 
 	Most used options include:
-	   [--watch]                    Re-run every time a file changes
 	   [--runServer]                Build demos locally and runs a server
 	   [--updateorigami]            Update origami.json with the latest demo files created
 	   [--js=<path>]                Main JavaScript file (default: ./src/main.js)
