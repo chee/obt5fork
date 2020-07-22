@@ -1,7 +1,6 @@
-/* eslint-env mocha, expect */
+/* eslint-env mocha */
 'use strict';
 
-const expect = require('expect.js');
 const mockery = require('mockery');
 const sinon = require('sinon');
 

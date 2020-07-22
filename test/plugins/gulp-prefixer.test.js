@@ -1,9 +1,7 @@
-/* global describe, it */
-
 // Code based on https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/testing.md
 'use strict';
 
-const expect = require('expect.js');
+const proclaim = require('proclaim');
 const File = require('vinyl');
 
 const prefixer = require('../../lib/plugins/gulp-prefixer.js');
@@ -22,8 +20,8 @@ describe('gulp-prefixer', function() {
 			myPrefixer.write(fakeFile);
 
 			myPrefixer.once('data', function(file) {
-				expect(file.isBuffer()).to.be(true);
-				expect(file.contents.toString('utf8')).to.be('prependthisabufferwiththiscontent');
+				proclaim.isTrue(file.isBuffer());
+				proclaim.equal(file.contents.toString('utf8'), 'prependthisabufferwiththiscontent');
 				done();
 			});
 
