@@ -10,13 +10,11 @@ describe('obt', function() {
 	const moduleUnderTest = '../lib/origami-build-tools';
 
 	const version = process.version;
-	const fetchMock = sinon.stub();
 	const updateNotifierMock = sinon.stub();
 	const logMock = sinon.stub();
 	const metricsMock = sinon.stub();
 
 	beforeEach(function() {
-		fetchMock.resetHistory();
 		logMock.resetHistory();
 		updateNotifierMock.resetHistory();
 		metricsMock.resetHistory();
@@ -27,7 +25,6 @@ describe('obt', function() {
 			warnOnUnregistered: false
 		});
 
-		mockery.registerMock('isomorphic-fetch', fetchMock);
 		mockery.registerMock('./helpers/update-notifier', updateNotifierMock);
 		mockery.registerMock('./helpers/log', logMock);
 		mockery.registerMock('./helpers/metrics', metricsMock);
