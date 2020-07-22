@@ -11,8 +11,4 @@ gulp.task('install', function() {
 	return obt.install();
 });
 
-gulp.task('watch', function() {
-	gulp.watch('./lib/**/*', ['test']);
-});
-
-gulp.task('default', ['test', 'watch']);
+gulp.task('default', ['test']);
