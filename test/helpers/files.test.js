@@ -6,26 +6,25 @@ const proclaim = require('proclaim');
 
 const files = require('../../lib/helpers/files');
 
-const obtPath = process.cwd();
+const projectPath = path.resolve(__dirname, '../../');
 const oTestPath = 'test/fixtures/o-test';
 const pathSuffix = '-file';
-const filesTestPath = path.resolve(obtPath, oTestPath + pathSuffix);
+const filesTestPath = path.resolve(projectPath, oTestPath + pathSuffix);
 
 describe('Files helper', function() {
 	before(function() {
-		fs.copySync(path.resolve(obtPath, oTestPath), filesTestPath);
+		fs.copySync(path.resolve(projectPath, oTestPath), filesTestPath);
 		process.chdir(filesTestPath);
 	});
 
 	after(function() {
-		process.chdir(obtPath);
+		process.chdir(projectPath);
 		fs.removeSync(filesTestPath);
 	});
 
 	it('should return module name', function() {
-		proclaim.equal(files.getModuleName(), '');
 		fs.writeFileSync('bower.json', JSON.stringify({ name: 'o-test' }), 'utf8');
-		proclaim.equal(files.getModuleName(), 'o-test');
+		proclaim.equal(files.getModuleName(filesTestPath), 'o-test');
 		fs.unlink(path.resolve(filesTestPath, 'bower.json'));
 	});
 
