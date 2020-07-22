@@ -3,14 +3,6 @@
 const gulp = require('gulp');
 const obt = require('./lib/origami-build-tools');
 
-gulp.task('verify', function() {
-	return obt.verify(gulp, {
-		esLintPath: '.eslintrc',
-		editorconfigPath: '.editorconfig',
-		excludeFiles: ['!test/fixtures/o-test/src/js/syntax-error.js']
-	});
-});
-
 gulp.task('test', function() {
 	return obt.test.npmTest(gulp);
 });
@@ -20,7 +12,7 @@ gulp.task('install', function() {
 });
 
 gulp.task('watch', function() {
-	gulp.watch('./lib/**/*', ['verify', 'test']);
+	gulp.watch('./lib/**/*', ['test']);
 });
 
-gulp.task('default', ['verify', 'test', 'watch']);
+gulp.task('default', ['test', 'watch']);

@@ -41,7 +41,6 @@ All the tasks are built using [gulp](http://gulpjs.com/), and almost all of them
 	   install  Install system and local dependencies
 	   build    Build module in current directory
 	   demo     Build demos into the demos/ directory
-	   verify   Lint code and verify if module structure follows the Origami specification
 	   test     Test if Sass silent compilation follows the Origami specification
 
 	Most used options include:
@@ -53,8 +52,6 @@ All the tasks are built using [gulp](http://gulpjs.com/), and almost all of them
 	   [--buildJs=<file>]           Compiled JavaScript file (default: main.js)
 	   [--buildCss=<file>]          Compiled CSS file (default: main.css)
 	   [--buildFolder=<dir>]        Compiled assets directory (default: ./build/)
-	   [--scssLintPath=<path>]      Custom scss-lint configuration
-	   [--esLintPath=<path>]        Custom esLint configuration
 	   [--editorconfigPath=<path>]  Custom .editorconfig
 
 ### `install`
@@ -63,14 +60,12 @@ Install tools and dependencies required to build modules.
 
 Runs:
 
-* __installScssLint()__ globally (if it's not already installed)
 * __installBower()__ globally (if it's not already installed)
 * __runNpmInstall()__ if there is a `package.json` inthe root directory
 * __runBowerInstall()__ using both the Origami Registry and the default Bower registry to resolve dependencies
 
 The versions that are installed and supported are:
 
-* scss-lint: '0.35.0'
 * Bower: '^1.3.0'
 
 Config:
@@ -133,22 +128,6 @@ Dist demos consist of only HTML, with build service URLs for static resources, a
 
 Local demos consist of HTML, CSS and JS (if Sass & JS exists), and are created in `demos/local/`. These files should not be committed. It is recommended to add _demos/local/_ to your `.gitignore`.
 
-### `verify`
-
-Lints JavaScript and SCSS against Origami coding standards (see standards for [SCSS](http://origami.ft.com/docs/syntax/scss/#syntax-convention-rules) and [JavaScript](http://origami.ft.com/docs/syntax/js/#syntax-convention-rules)).
-
-Runs:
-
-* __scssLint(gulp, config)__ Config accepts:
-	- scssLintPath: `String` Path to your custom 'scss-lint.yml' config file. (Default: 'origami-build-tools/config/scss-lint.yml') _This may be set for product development, but developers of Origami-compliant components are required to accept the default_
-	- excludeFiles `Array` e.g. `['!**/demo.scss']`
-* __esLint(gulp, config)__ Config accepts:
-	- esLintPath: `String` Path to your custom esLint config file. (Default: 'origami-build-tools/config/.eslintrc' _This may be set for product development, but developers of Origami-compliant components are required to accept the default_
-	- excludeFiles `Array` e.g. `['!**/demo.js']`
-* __lintspaces(gulp, config)__ Config accepts:
-	- editorconfigPath: `String` Path to your '.editorconfig' that lintspaces uses for linting. (Default: 'origami-build-tools/config/.editorconfig') _This may be set for product development, but developers of Origami-compliant components are required to accept the default_
-* __origamiJson()__ If there's an 'origami.json' file in your project's root, it will make sure it's compliant with the [spec](http://origami.ft.com/docs/syntax/origamijson/#format)
-
 ### `test`
 
 * __silentCompilation(gulp)__ Test [silent compilation](http://origami.ft.com/docs/syntax/scss/#silent-styles). Check the Sass outputs no CSS by default. Only ran af a `$<module-name>-is-silent` variable is found
@@ -182,13 +161,6 @@ var obt = require('origami-build-tools');
 gulp.task('build', function() {
 	obt.build.js(gulp, {js: './src/main.js'});
 	obt.build.sass(gulp, {sass: './src/main.scss'});
-});
-
-gulp.task('verify', function() {
-	obt.verify(gulp, {
-		js: './src/main.js',
-		sass: './src/main.scss'
-	});
 });
 ```
 
