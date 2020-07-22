@@ -11,10 +11,8 @@ describe('obt', function() {
 
 	const version = process.version;
 	const updateNotifierMock = sinon.stub();
-	const logMock = sinon.stub();
 
 	beforeEach(function() {
-		logMock.resetHistory();
 		updateNotifierMock.resetHistory();
 
 		mockery.enable({
@@ -22,8 +20,6 @@ describe('obt', function() {
 			warnOnReplace: false,
 			warnOnUnregistered: false
 		});
-
-		mockery.registerMock('./helpers/log', logMock);
 
 		mockery.registerAllowable(moduleUnderTest);
 
