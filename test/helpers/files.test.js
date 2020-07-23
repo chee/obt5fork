@@ -23,11 +23,11 @@ describe('Files helper', function() {
 	});
 
 	it('should return an empty string give no bower.json', function () {
+		fs.removeSync('bower.json');
 		proclaim.equal(files.getModuleName(filesTestPath), '');
 	});
 
 	it('should return module name given a bower.json with a name property', function() {
-		fs.writeFileSync('bower.json', JSON.stringify({ name: 'o-test' }), 'utf8');
 		proclaim.equal(files.getModuleName(filesTestPath), 'o-test');
 	});
 
