@@ -12,7 +12,7 @@ const path = require('path');
 
 const build = require('../../lib/tasks/build');
 
-const obtPath = process.cwd();
+const obtPath = path.resolve(__dirname, '../../');
 const oTestPath = 'test/fixtures/o-test';
 
 const CORE_JS_IDENTIFIER = '__core-js_shared__';

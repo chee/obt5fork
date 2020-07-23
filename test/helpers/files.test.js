@@ -6,27 +6,29 @@ const proclaim = require('proclaim');
 
 const files = require('../../lib/helpers/files');
 
-const obtPath = process.cwd();
+const obtPath = path.resolve(__dirname, '../../');
 const oTestPath = 'test/fixtures/o-test';
 const pathSuffix = '-file';
 const filesTestPath = path.resolve(obtPath, oTestPath + pathSuffix);
 
 describe('Files helper', function() {
-	before(function() {
+	beforeEach(function() {
 		fs.copySync(path.resolve(obtPath, oTestPath), filesTestPath);
 		process.chdir(filesTestPath);
 	});
 
-	after(function() {
+	afterEach(function() {
 		process.chdir(obtPath);
 		fs.removeSync(filesTestPath);
 	});
 
-	it('should return module name', function() {
-		proclaim.equal(files.getModuleName(), '');
+	it('should return an empty string give no bower.json', function () {
+		proclaim.equal(files.getModuleName(filesTestPath), '');
+	});
+
+	it('should return module name given a bower.json with a name property', function() {
 		fs.writeFileSync('bower.json', JSON.stringify({ name: 'o-test' }), 'utf8');
-		proclaim.equal(files.getModuleName(), 'o-test');
-		fs.unlink(path.resolve(filesTestPath, 'bower.json'));
+		proclaim.equal(files.getModuleName(filesTestPath), 'o-test');
 	});
 
 	describe('.getMustacheFilesList(basePath)', () => {
