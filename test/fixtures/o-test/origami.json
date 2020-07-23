@@ -11,22 +11,16 @@
     },
     "demos": [
         {
-            "name": "test1",
-            "template": "demos/src/test1.mustache",
-            "path": "/demos/test1.html",
+            "name": "test",
+            "template": "demos/src/test.mustache",
+            "path": "/demos/test.html",
             "description": "First test"
-        },
-        {
-            "name": "test2",
-            "template": "demos/src/test2.mustache",
-            "path": "/demos/test2.html",
-            "hidden": true,
-            "description": "Second test"
         },
         {
               "name": "pa11y",
               "template": "demos/src/pa11y.mustache",
-              "description": "Pa11y test"
+              "description": "Pa11y test",
+              "hidden": true
         }
     ],
     "browserFeatures": {
