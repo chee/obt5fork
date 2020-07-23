@@ -21,7 +21,7 @@ const buildStream = obt.build.js(gulp, config);
 JavaScript `config` accepts:
 - js: `String` Path to your main JavaScript file. (Default: './main.js' and checks your bower.json to see if it's in its main key)
 - buildJs: `String` Name of the built JavaScript bundle. (Default: 'main.js')
-- buildFolder: `String` Path to directory where the built file will be created. If set to `'disabled'`, files won't be saved. (Default: './build/')
+- buildFolder: `String` Path to directory where the built file will be created. (Default: './build/')
 - env: `String` It can be either 'production' or 'development'. If it's 'production', it will run [uglify](https://github.com/mishoo/UglifyJS2). If it's 'development', it will generate a sourcemap. (Default: 'development')
 - cwd: `String` The path to the working directory, in which the code to be built exists. (Default: current working directory)
 - sourcemaps: `Boolean | 'inline'` Set to true to output sourcemaps as a separate file, even if env is 'production'. Set to 'inline' to output sourcemaps inline (Default: false in production, true in development)
@@ -41,7 +41,7 @@ Sass `config` accepts:
 - autoprefixerRemove: `Boolean` Remove unneeded prefixes (Default: true)
 - cwd: `String` The path to the working directory, in which the code to be built exists. (Default: current working directory)
 - buildCss: `String` Name of the built CSS bundle. (Default: 'main.css')
-- buildFolder: `String` Path to directory where the built file will be created. If set to `'disabled'`, files won't be saved. (Default: './build/')
+- buildFolder: `String` Path to directory where the built file will be created. (Default: './build/')
 - sourcemaps: `Boolean | 'inline'` Set to true to output sourcemaps as a separate file, even if env is 'production'. Set to 'inline' to output sourcemaps inline (Default: false in production, true in development)
 - env: `String` It can be either 'production' or 'development'. If it's 'production', it will compile the Sass file with the 'compressed' style option and will also run [clean-css](https://github.com/jakubpawlowicz/clean-css). (Default: 'development')
 
