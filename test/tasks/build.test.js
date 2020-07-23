@@ -16,11 +16,11 @@ const fixturePath = path.join(testRoot, 'fixtures/o-test');
 const CORE_JS_IDENTIFIER = '__core-js_shared__';
 
 describe('Build task', function() {
-	let testPath = '';
+	let testPath;
 	let buildDuplex;
 
-	beforeEach(function () {;
-		testPath = path.join(testRoot, `.test-run-${Date.now()}`);
+	beforeEach(function () {
+		testPath = path.join(testRoot, `.test-run-build-${Date.now()}`);
 		fs.copySync(fixturePath, testPath);
 	});
 
