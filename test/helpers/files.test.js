@@ -6,35 +6,43 @@ const proclaim = require('proclaim');
 
 const files = require('../../lib/helpers/files');
 
-const obtPath = path.resolve(__dirname, '../../');
-const oTestPath = 'test/fixtures/o-test';
-const pathSuffix = '-file';
-const filesTestPath = path.resolve(obtPath, oTestPath + pathSuffix);
+const projectRoot = path.join(__dirname, '../../');
+const testRoot = path.join(projectRoot, '/test');
+const fixturePath = path.join(testRoot, 'fixtures/o-test');
 
-describe('Files helper', function() {
-	beforeEach(function() {
-		fs.copySync(path.resolve(obtPath, oTestPath), filesTestPath);
-		process.chdir(filesTestPath);
+describe('Files helper', () => {
+	let testPath;
+
+	beforeEach(() => {
+		testPath = path.join(testRoot, `.test-run-files-${Date.now()}`);
+		fs.copySync(fixturePath, testPath);
 	});
 
-	afterEach(function() {
-		process.chdir(obtPath);
-		fs.removeSync(filesTestPath);
+	afterEach(() => {
+		fs.removeSync(testPath);
 	});
 
-	it('should return an empty string give no bower.json', function () {
-		fs.removeSync('bower.json');
-		proclaim.equal(files.getModuleName(filesTestPath), '');
-	});
+	describe('.getModuleName(basePath)', () => {
+		it('should return an empty string give no bower.json', function () {
+			fs.removeSync(path.join(testPath, 'bower.json'));
+			proclaim.equal(files.getModuleName(testPath), '');
+		});
 
-	it('should return module name given a bower.json with a name property', function() {
-		proclaim.equal(files.getModuleName(filesTestPath), 'o-test');
+		it('should return module name given a bower.json with a name property', function() {
+			proclaim.equal(files.getModuleName(testPath), 'o-test');
+		});
 	});
 
 	describe('.getMustacheFilesList(basePath)', () => {
-		const mustacheTestPath = path.resolve(filesTestPath, 'demos/src');
-		const flatMustacheFiles = path.resolve(mustacheTestPath, 'flat');
-		const nestedMustacheFiles = path.resolve(mustacheTestPath, 'nested');
+		let mustacheTestPath;
+		let flatMustacheFiles;
+		let nestedMustacheFiles;
+
+		beforeEach(() => {
+			mustacheTestPath = path.join(testPath, 'demos/src');
+			flatMustacheFiles = path.join(mustacheTestPath, 'flat');
+			nestedMustacheFiles = path.join(mustacheTestPath, 'nested');
+		});
 
 		it('is a function', () => {
 			proclaim.isTypeOf(files.getMustacheFilesList, 'function');
