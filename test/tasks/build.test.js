@@ -6,7 +6,6 @@ const gulp = require('gulp');
 
 const fs = require('fs-extra');
 const path = require('path');
-const os = require('os');
 
 const build = require('../../lib/tasks/build');
 
