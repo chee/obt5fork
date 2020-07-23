@@ -18,9 +18,11 @@ const oTestPath = 'test/fixtures/o-test';
 const CORE_JS_IDENTIFIER = '__core-js_shared__';
 
 describe('Build task', function() {
-	describe('Build Js', function() {
+
+	describe('Build Js', function () {
 		const pathSuffix = '-build-js';
 		const buildTestPath = path.resolve(obtPath, oTestPath + pathSuffix);
+		let defaultOptions;
 
 		before(function() {
 			fs.copySync(path.resolve(obtPath, oTestPath), buildTestPath);
@@ -31,6 +33,11 @@ describe('Build task', function() {
 					main: 'main.js'
 				}
 			), 'utf8');
+			defaultOptions = {
+				cwd: process.cwd(),
+				buildFolder: path.join(process.cwd(), '/build/'),
+				js: path.join(process.cwd(), '/main.js'),
+			};
 		});
 
 		after(function() {
@@ -45,7 +52,7 @@ describe('Build task', function() {
 		});
 
 		it('should work with default options', function(done) {
-			build.js(gulp)
+			build.js(gulp, defaultOptions)
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
 					proclaim.include(builtJs, 'sourceMappingURL');
@@ -59,9 +66,9 @@ describe('Build task', function() {
 
 		it('should work with production option', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, defaultOptions, {
 					env: 'production'
-				})
+				}))
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
 					proclaim.doesNotInclude(builtJs, 'sourceMappingURL');
@@ -75,9 +82,9 @@ describe('Build task', function() {
 
 		it('should include the the babel-runtime polyfills by default', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, defaultOptions, {
 					js: './src/js/babelRuntime.js'
-				})
+				}))
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
 					proclaim.include(builtJs, CORE_JS_IDENTIFIER);
@@ -87,10 +94,10 @@ describe('Build task', function() {
 
 		it('should not include the the babel-runtime polyfills if \'babelRuntime\' is falsey', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, {
 					js: './src/js/babelRuntime.js',
 					babelRuntime: false
-				})
+				}, defaultOptions))
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
 					proclaim.doesNotInclude(builtJs, CORE_JS_IDENTIFIER);
@@ -100,9 +107,9 @@ describe('Build task', function() {
 
 		it('should build from custom source', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, defaultOptions, {
 					js: './src/js/test.js'
-				})
+				}))
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/main.js', 'utf8');
 					proclaim.include(builtJs, 'sourceMappingURL');
@@ -114,9 +121,9 @@ describe('Build task', function() {
 
 		it('should build to a custom directory', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, defaultOptions, {
 					buildFolder: 'test-build'
-				})
+				}))
 				.on('end', function() {
 					const builtJs = fs.readFileSync('test-build/main.js', 'utf8');
 					proclaim.include(builtJs, 'sourceMappingURL');
@@ -130,9 +137,9 @@ describe('Build task', function() {
 
 		it('should build to a custom file', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, defaultOptions, {
 					buildJs: 'bundle.js'
-				})
+				}))
 				.on('end', function() {
 					const builtJs = fs.readFileSync('build/bundle.js', 'utf8');
 					proclaim.include(builtJs, 'sourceMappingURL');
@@ -146,9 +153,9 @@ describe('Build task', function() {
 
 		it('should fail on syntax error', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, defaultOptions, {
 					js: './src/js/syntax-error.js'
-				})
+				}))
 				.on('error', function(e) {
 					proclaim.include(e.message, 'SyntaxError');
 					proclaim.include(e.message, 'Unexpected token');
@@ -163,9 +170,9 @@ describe('Build task', function() {
 
 		it('should fail when a dependency is not found', function(done) {
 			build
-				.js(gulp, {
+				.js(gulp, Object.assign({}, defaultOptions, {
 					js: './src/js/missing-dep.js'
-				})
+				}))
 				.on('error', function(e) {
 					try {
 						proclaim.include(e.message, 'Module not found: Error: Can\'t resolve \'dep\'');
@@ -183,6 +190,7 @@ describe('Build task', function() {
 	describe('Build Sass', function() {
 		const pathSuffix = '-build-sass';
 		const buildTestPath = path.resolve(obtPath, oTestPath + pathSuffix);
+		let defaultOptions;
 
 		before(function() {
 			fs.copySync(path.resolve(obtPath, oTestPath), buildTestPath);
@@ -193,6 +201,11 @@ describe('Build task', function() {
 					main: 'main.scss'
 				}
 			), 'utf8');
+			defaultOptions = {
+				cwd: process.cwd(),
+				buildFolder: path.join(process.cwd(), '/build/'),
+				sass: path.join(process.cwd(), '/main.scss'),
+			};
 		});
 
 		after(function() {
@@ -205,7 +218,7 @@ describe('Build task', function() {
 		});
 
 		it('should work with default options', function(done) {
-			build.sass(gulp)
+			build.sass(gulp, defaultOptions)
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/main.css', 'utf8');
 					proclaim.include(builtCss, 'div {\n  color: blue; }\n');
@@ -215,9 +228,9 @@ describe('Build task', function() {
 
 		it('should work with production option', function(done) {
 			build
-				.sass(gulp, {
+				.sass(gulp, Object.assign({}, defaultOptions, {
 					env: 'production'
-				})
+				}))
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/main.css', 'utf8');
 					proclaim.equal(builtCss, 'div{color:#00f}');
@@ -227,9 +240,9 @@ describe('Build task', function() {
 
 		it('should build from custom source', function(done) {
 			build
-				.sass(gulp, {
+				.sass(gulp, Object.assign({}, defaultOptions, {
 					sass: './src/scss/test.scss'
-				})
+				}))
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/main.css', 'utf8');
 					proclaim.include(builtCss, 'p {\n  color: #000000; }\n');
@@ -239,9 +252,9 @@ describe('Build task', function() {
 
 		it('should build to a custom directory', function(done) {
 			build
-				.sass(gulp, {
+				.sass(gulp, Object.assign({}, defaultOptions, {
 					buildFolder: 'test-build'
-				})
+				}))
 				.on('end', function() {
 					const builtCss = fs.readFileSync('test-build/main.css', 'utf8');
 					proclaim.include(builtCss, 'div {\n  color: blue; }\n');
@@ -252,9 +265,9 @@ describe('Build task', function() {
 
 		it('should build to a custom file', function(done) {
 			build
-				.sass(gulp, {
+				.sass(gulp, Object.assign({}, defaultOptions, {
 					buildCss: 'bundle.css'
-				})
+				}))
 				.on('end', function() {
 					const builtCss = fs.readFileSync('build/bundle.css', 'utf8');
 					proclaim.include(builtCss, 'div {\n  color: blue; }\n');
