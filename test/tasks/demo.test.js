@@ -8,16 +8,20 @@ const gulp = require('gulp');
 
 const demo = require('../../lib/tasks/demo');
 
-const obtPath = process.cwd();
+const obtPath = path.resolve(__dirname, '../../');
 const oTestPath = 'test/fixtures/o-test';
 const pathSuffix = '-demo';
 const demoTestPath = path.resolve(obtPath, oTestPath + pathSuffix);
 
 describe('Demo task', function() {
+	let defaultOptions;
 
 	beforeEach(function() {
 		fs.copySync(path.resolve(obtPath, oTestPath), demoTestPath);
 		process.chdir(demoTestPath);
+		defaultOptions = {
+			cwd: process.cwd()
+		};
 	});
 
 	afterEach(function() {
@@ -27,15 +31,15 @@ describe('Demo task', function() {
 
 	describe('Build demos', function() {
 		it('should fail if there is not a config file', function(done) {
-			process.chdir(obtPath);
-			fs.writeFileSync('bower.json', '{"name":"o-test"}', 'utf8');
-			demo(gulp)
+			fs.removeSync('origami.json');
+			const demoStream = demo(gulp, defaultOptions)
 				.on('error', function(err) {
 					proclaim.equal(err.message, 'Couldn\'t find demos config path, checked: origami.json,demos/src/config.json');
 					fs.unlink(path.resolve(obtPath, 'bower.json'));
 					process.chdir(demoTestPath);
 					done();
 				});
+			demoStream.resume();
 		});
 
 		it('should build demos defined in custom configuration files when specified', function (done) {
@@ -62,7 +66,7 @@ describe('Demo task', function() {
 			fs.writeFileSync(configPath, JSON.stringify(config), 'utf8');
 			fs.writeFileSync(templatePath, templateMarkup, 'utf8');
 			// Assert the template defined in custom config is built without error.
-			demo(gulp, { demoConfig: configPath })
+			demo(gulp, Object.assign({}, defaultOptions, { demoConfig: configPath }))
 				.on('data', function (file) {
 					proclaim.include(file.path, `${testKey}.html`);
 					proclaim.include(file.contents.toString('utf8'), templateMarkup);
@@ -74,9 +78,9 @@ describe('Demo task', function() {
 
 		it('should build demos defined in origami.json', function(done) {
 			const createdFiles = [];
-			demo(gulp, {
+			demo(gulp, Object.assign({}, defaultOptions, {
 				demoConfig: 'origami.json'
-			}).on('data', function (file) {
+			})).on('data', function (file) {
 				createdFiles.push({
 					path: file.path,
 					content: file.contents.toString('utf8'),
@@ -111,9 +115,9 @@ describe('Demo task', function() {
 			};
 			fs.writeFileSync('origami.json', JSON.stringify(demoConfig));
 
-			demo(gulp, {
+			demo(gulp, Object.assign({}, defaultOptions, {
 				demoConfig: 'origami.json'
-			}).on('data', function (file) {
+			})).on('data', function (file) {
 				proclaim.include(file.path, 'test.html');
 				proclaim.include(file.contents.toString('utf8'), '<div>test</div>');
 				proclaim.include(file.contents.toString('utf8'), 'old-config-test');
@@ -147,7 +151,7 @@ describe('Demo task', function() {
 			fs.writeFileSync(configPath, JSON.stringify(config), 'utf8');
 			fs.writeFileSync(templatePath, templateMarkup, 'utf8');
 			// Assert the template defined in config.json is built without error.
-			demo(gulp)
+			demo(gulp, defaultOptions)
 				.on('data', function(file) {
 					proclaim.include(file.path, `${testKey}.html`);
 					proclaim.include(file.contents.toString('utf8'), templateMarkup);
@@ -162,7 +166,7 @@ describe('Demo task', function() {
 			const existingDemoConfig = demoConfig.demos[1];
 			demoConfig.demos.push(Object.assign({}, existingDemoConfig));
 			fs.writeFileSync('origami.json', JSON.stringify(demoConfig));
-			const demoStream = demo(gulp)
+			const demoStream = demo(gulp, defaultOptions)
 				.on('error', function errorHandler(err) {
 					proclaim.equal(err.message, 'Demos with the same name were found. Give them unique names and try again.');
 					done();
@@ -171,7 +175,7 @@ describe('Demo task', function() {
 		});
 
 		it('should build demo html', function(done) {
-			const demoStream = demo(gulp)
+			const demoStream = demo(gulp, defaultOptions)
 			.on('end', function() {
 					const test = fs.readFileSync('demos/test.html', 'utf8');
 					const pa11y = fs.readFileSync('demos/pa11y.html', 'utf8');
@@ -191,7 +195,7 @@ describe('Demo task', function() {
 				{{>partial1}}
 				{{>partials/partial2}}
 			`, 'utf8');
-			const demoStream = demo(gulp)
+			const demoStream = demo(gulp, defaultOptions)
 			.on('end', function() {
 				const test = fs.readFileSync('demos/test.html', 'utf8');
 				proclaim.include(test, '<div>partial1</div>');
