@@ -68,13 +68,13 @@ describe('Demo task', function() {
 					proclaim.include(file.contents.toString('utf8'), templateMarkup);
 					done();
 				}).on('error', function errorHandler(err) {
-					throw new Error('There was an error: ' + err.message);
+					done(new Error('There was an error: ' + err.message));
 				});
 		});
 
 		it('should build demos defined in origami.json', function(done) {
 			const createdFiles = [];
-			const demoStream = demo(gulp, {
+			demo(gulp, {
 				demoConfig: 'origami.json'
 			}).on('data', function (file) {
 				createdFiles.push({
@@ -82,7 +82,7 @@ describe('Demo task', function() {
 					content: file.contents.toString('utf8'),
 				});
 			}).on('error', function(err) {
-				throw new Error('There was an error: ' + err.message);
+				done(new Error('There was an error: ' + err.message));
 			}).on('end', function() {
 				const test = createdFiles.find(f => f.path.includes('test.html')) || {};
 				const pa11y = createdFiles.find(f => f.path.includes('pa11y.html')) || {};
@@ -119,7 +119,7 @@ describe('Demo task', function() {
 				proclaim.include(file.contents.toString('utf8'), 'old-config-test');
 				done();
 			}).on('error', function errorHandler(err) {
-				throw new Error('There was an error: ' + err.message);
+				done(new Error('There was an error: ' + err.message));
 			});
 		});
 
@@ -153,7 +153,7 @@ describe('Demo task', function() {
 					proclaim.include(file.contents.toString('utf8'), templateMarkup);
 					done();
 				}).on('error', function errorHandler(err) {
-					throw new Error('There was an error: ' + err.message);
+					done(new Error('There was an error: ' + err.message));
 				});
 		});
 
