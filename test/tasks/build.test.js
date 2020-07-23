@@ -11,7 +11,8 @@ const os = require('os');
 const build = require('../../lib/tasks/build');
 
 const projectRoot = path.join(__dirname, '../../');
-const fixturePath = path.join(projectRoot, 'test/fixtures/o-test');
+const testRoot = path.join(projectRoot, '/test');
+const fixturePath = path.join(testRoot, 'fixtures/o-test');
 
 const CORE_JS_IDENTIFIER = '__core-js_shared__';
 
@@ -20,7 +21,7 @@ describe('Build task', function() {
 	let buildDuplex;
 
 	beforeEach(function () {;
-		testPath = path.join(os.tmpdir(), `obt-build-test-${Date.now()}`);
+		testPath = path.join(testRoot, `.test-run-${Date.now()}`);
 		fs.copySync(fixturePath, testPath);
 	});
 
@@ -49,7 +50,7 @@ describe('Build task', function() {
 					proclaim.include(builtJs, 'sourceMappingURL');
 					proclaim.include(builtJs, 'var Test');
 					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
-					// proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
+					proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
 					proclaim.include(builtJs, '\n\nmodule.exports = {"test":true}\n\n');
 					done();
 				});
@@ -126,7 +127,7 @@ describe('Build task', function() {
 					proclaim.include(builtJs, 'sourceMappingURL');
 					proclaim.include(builtJs, 'var Test');
 					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
-					// proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
+					proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
 					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
 					done();
 				});
@@ -146,7 +147,7 @@ describe('Build task', function() {
 					proclaim.include(builtJs, 'sourceMappingURL');
 					proclaim.include(builtJs, 'var Test');
 					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
-					// proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
+					proclaim.include(builtJs, 'var textTest = "This is a test\\n";');
 					proclaim.include(builtJs, 'function Test() {\n\tvar name = \'test\';');
 					done();
 				});
