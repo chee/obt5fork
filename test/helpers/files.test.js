@@ -29,34 +29,6 @@ describe('Files helper', function() {
 		fs.unlink(path.resolve(filesTestPath, 'bower.json'));
 	});
 
-	describe('Main files', function() {
-		before(function() {
-			fs.writeFileSync('bower.json', JSON.stringify({ name: 'o-test' }), 'utf8');
-		});
-
-		after(function() {
-			fs.unlink(path.resolve(filesTestPath, 'bower.json'));
-		});
-
-		it('should get the path of main.scss', function() {
-			proclaim.equal(files.getMainSassPath(), null);
-			const bowerJson = require(path.join(process.cwd(), '/bower.json'));
-			bowerJson.main = bowerJson.main || [];
-			bowerJson.main.push('main.scss');
-			fs.writeFileSync('bower.json', JSON.stringify(bowerJson), 'utf8');
-			proclaim.equal(files.getMainSassPath(), process.cwd() + '/main.scss');
-		});
-
-		it('should get the path of main.js', function() {
-			proclaim.equal(files.getMainJsPath(), null);
-			const bowerJson = require(path.join(process.cwd(), '/bower.json'));
-			bowerJson.main = bowerJson.main || [];
-			bowerJson.main.push('main.js');
-			fs.writeFileSync('bower.json', JSON.stringify(bowerJson), 'utf8');
-			proclaim.equal(files.getMainJsPath(), process.cwd() + '/main.js');
-		});
-	});
-
 	describe('.getMustacheFilesList(basePath)', () => {
 		const mustacheTestPath = path.resolve(filesTestPath, 'demos/src');
 		const flatMustacheFiles = path.resolve(mustacheTestPath, 'flat');
