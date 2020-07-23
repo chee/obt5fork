@@ -8,16 +8,9 @@ const gulp = require('gulp');
 
 const demo = require('../../lib/tasks/demo');
 
-const obtPath = path.resolve(__dirname, '../../');
-const oTestPath = 'test/fixtures/o-test';
-const pathSuffix = '-demo';
-const demoTestPath = path.resolve(obtPath, oTestPath + pathSuffix);
-
-
 const projectRoot = path.join(__dirname, '../../');
 const testRoot = path.join(projectRoot, '/test');
 const fixturePath = path.join(testRoot, 'fixtures/o-test');
-
 
 describe('Demo task', function() {
 	let testPath;
