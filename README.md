@@ -1,3 +1,5 @@
+*This project has been merged into the [Origami Build Service](https://github.com/Financial-Times/origami-build-service/pull/324), this repo is no longer maintained.*
+
 # obtv5fork
 
 `obtv5fork` will be used to bundle Origami components within v2 of the [Origami Build Service](https://github.com/Financial-Times/origami-build-service). It is a fork of [origami-build-tools v5](https://github.com/Financial-Times/origami-build-tools), which the [Origami Build Service](https://github.com/Financial-Times/origami-build-service) currently uses, with features for local component development removed.
